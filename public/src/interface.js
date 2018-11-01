@@ -7,6 +7,8 @@ $(document).ready(function() {
   $('#temperature-up').on('click', function() {
     thermostat.up(); 
     updateTemperature();
+    // debugger;
+    sendTemp();
   });
 
   $('#temperature-down').click(function() {
@@ -46,12 +48,25 @@ $(document).ready(function() {
     });
   };
 
-  displayWeather('London');
+  var settings = {"city" : "Ashford"}; 
+
+  $.get('/settings', function(data) {
+    settings = JSON.parse(data)
+    thermostat._temperature = parseInt(settings.current_temperature, 10);
+    $('#temperature').text(settings.current_temperature);
+    displayWeather(settings.city);
+  });
+
+  displayWeather(settings.city);
 
   $('#select-city').submit(function(event) {
     event.preventDefault();
     var city = $('#current-city').val();
     displayWeather(city);
   });
+
+  function sendTemp(){
+    $.post("/settings",{ current_temperature: "22222", city: "Csaba"});
+  };
   
 });

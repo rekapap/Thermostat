@@ -1,5 +1,6 @@
 class ThermostatSettings
-  def initialize(current_temp, city)
+  attr_reader :id, :current_temp, :city, :time
+  def initialize(id:, current_temp:, city:, time:)
     @id = id
     @current_temp = current_temp
     @city = city
@@ -20,7 +21,7 @@ class ThermostatSettings
   end
 
   def self.latest
-    result = DatabaseConnection.query('SELECT * FROM settings Table ORDER BY max(timestamp);').first
+    result = DatabaseConnection.query('SELECT * FROM settings;').first
     ThermostatSettings.new(
       id: result['id'],
       current_temp: result['current_temp'],
